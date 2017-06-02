@@ -10,7 +10,7 @@ import android.view.animation.RotateAnimation;
 import android.view.animation.ScaleAnimation;
 import android.widget.RelativeLayout;
 
-import com.atguigu.beijingnewsone_0224.activity.MainActivity;
+import com.atguigu.beijingnewsone_0224.activity.GuideActivity;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -62,7 +62,7 @@ public class WelcomeActivity extends AppCompatActivity {
 
             @Override
             public void onAnimationEnd(Animation animation) {
-                Intent intent = new Intent(WelcomeActivity.this,MainActivity.class);
+                Intent intent = new Intent(WelcomeActivity.this,GuideActivity.class);
                 startActivity(intent);
                 //关闭当前页面
                 finish();
