@@ -1,17 +1,42 @@
 package com.atguigu.beijingnewsone_0224.activity;
 
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 
 import com.atguigu.beijingnewsone_0224.R;
+import com.atguigu.beijingnewsone_0224.fragment.ContentFragment;
+import com.atguigu.beijingnewsone_0224.fragment.LeftMenuFragment;
 import com.atguigu.beijingnewsone_0224.utils.DensityUtil;
 import com.slidingmenu.lib.SlidingMenu;
 import com.slidingmenu.lib.app.SlidingFragmentActivity;
 
 public class MainActivity extends SlidingFragmentActivity {
 
+    public static final String LEFT_TAG = "left_tag";
+    public static final String MAIN_TAG = "main_tag";
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        initSlidingMenu();
+        initFragment();
+    }
+
+    private void initFragment() {
+        //1.得到fragmentManger
+        FragmentManager fm = getSupportFragmentManager();
+        //2.开启事物
+        FragmentTransaction ft = fm.beginTransaction();
+        //3.替换两个fragment
+        ft.replace(R.id.fl_left,new LeftMenuFragment(), LEFT_TAG);
+        ft.replace(R.id.fl_main,new ContentFragment(), MAIN_TAG);
+        //4.提交事物
+        ft.commit();
+
+    }
+
+    private void initSlidingMenu() {
         //设置主页面
         setContentView(R.layout.activity_main);
         //设置左侧菜单
@@ -29,6 +54,5 @@ public class MainActivity extends SlidingFragmentActivity {
 
         //设置主页面占的宽度
         slidingMenu.setBehindOffset(DensityUtil.dip2px(this, 200));
-
     }
 }
