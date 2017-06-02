@@ -11,6 +11,8 @@ import android.view.animation.ScaleAnimation;
 import android.widget.RelativeLayout;
 
 import com.atguigu.beijingnewsone_0224.activity.GuideActivity;
+import com.atguigu.beijingnewsone_0224.activity.MainActivity;
+import com.atguigu.beijingnewsone_0224.utils.CacheUtils;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -33,15 +35,15 @@ public class WelcomeActivity extends AppCompatActivity {
 
     private void setAnimation() {
         //设置三个动画: 渐变动画,缩放动画,旋转动画
-        AlphaAnimation aa = new AlphaAnimation(0,1);
+        AlphaAnimation aa = new AlphaAnimation(0, 1);
         aa.setDuration(2000);
         aa.setFillAfter(true);
 
-        ScaleAnimation sa = new ScaleAnimation(0,1,0,1,RELATIVE_TO_SELF, 0.5f, RELATIVE_TO_SELF, 0.5f);
+        ScaleAnimation sa = new ScaleAnimation(0, 1, 0, 1, RELATIVE_TO_SELF, 0.5f, RELATIVE_TO_SELF, 0.5f);
         sa.setDuration(2000);
         sa.setFillAfter(true);
 
-        RotateAnimation ra = new RotateAnimation(0,360,RELATIVE_TO_SELF, 0.5f, RELATIVE_TO_SELF, 0.5f);
+        RotateAnimation ra = new RotateAnimation(0, 360, RELATIVE_TO_SELF, 0.5f, RELATIVE_TO_SELF, 0.5f);
         ra.setDuration(2000);
         ra.setFillAfter(true);
 
@@ -62,7 +64,15 @@ public class WelcomeActivity extends AppCompatActivity {
 
             @Override
             public void onAnimationEnd(Animation animation) {
-                Intent intent = new Intent(WelcomeActivity.this,GuideActivity.class);
+                boolean startMain = CacheUtils.getBoolean(WelcomeActivity.this, "start_main");
+                Intent intent = null;
+                if (startMain) {
+                    //进入主页面
+                    intent = new Intent(WelcomeActivity.this, MainActivity.class);
+                } else {
+                    intent = new Intent(WelcomeActivity.this, GuideActivity.class);
+                }
+
                 startActivity(intent);
                 //关闭当前页面
                 finish();
