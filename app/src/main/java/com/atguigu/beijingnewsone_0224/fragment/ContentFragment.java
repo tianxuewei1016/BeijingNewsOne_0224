@@ -1,5 +1,6 @@
 package com.atguigu.beijingnewsone_0224.fragment;
 
+import android.content.Context;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.View;
@@ -7,12 +8,14 @@ import android.view.ViewGroup;
 import android.widget.RadioGroup;
 
 import com.atguigu.beijingnewsone_0224.R;
+import com.atguigu.beijingnewsone_0224.activity.MainActivity;
 import com.atguigu.beijingnewsone_0224.base.BaseFragment;
 import com.atguigu.beijingnewsone_0224.base.BasePager;
 import com.atguigu.beijingnewsone_0224.pager.HomePager;
 import com.atguigu.beijingnewsone_0224.pager.NewsPager;
 import com.atguigu.beijingnewsone_0224.pager.SettingPager;
 import com.atguigu.beijingnewsone_0224.view.NoViewPager;
+import com.slidingmenu.lib.SlidingMenu;
 
 import java.util.ArrayList;
 
@@ -81,6 +84,13 @@ public class ContentFragment extends BaseFragment {
             @Override
             public void onPageSelected(int position) {
                 pagers.get(position).initData();
+                if(position == 1) {
+                    //可以侧滑
+                    isEnableSlidingMenu(mContext, SlidingMenu.TOUCHMODE_FULLSCREEN);
+                }else{
+                    //不可以侧滑
+                    isEnableSlidingMenu((MainActivity) mContext, SlidingMenu.TOUCHMODE_NONE);
+                }
             }
 
             @Override
@@ -91,6 +101,12 @@ public class ContentFragment extends BaseFragment {
         pagers.get(0).initData();
         //默认选中主页
         rgMain.check(R.id.rb_home);
+        isEnableSlidingMenu((MainActivity) mContext, SlidingMenu.TOUCHMODE_NONE);
+    }
+
+    private static void isEnableSlidingMenu(Context mContext, int touchmodeFullscreen) {
+        MainActivity mainActivity = (MainActivity) mContext;
+        mainActivity.getSlidingMenu().setTouchModeAbove(touchmodeFullscreen);
     }
 
     class MyAdapter extends PagerAdapter {
