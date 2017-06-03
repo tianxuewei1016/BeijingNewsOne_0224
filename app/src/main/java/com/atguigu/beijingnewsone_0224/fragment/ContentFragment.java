@@ -1,6 +1,7 @@
 package com.atguigu.beijingnewsone_0224.fragment;
 
 import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RadioGroup;
@@ -55,24 +56,44 @@ public class ContentFragment extends BaseFragment {
         rgMain.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-                switch (checkedId){
+                switch (checkedId) {
                     case R.id.rb_home:
-                        vp.setCurrentItem(0,false);
+                        vp.setCurrentItem(0, false);
+//                        pagers.get(0).initData();
                         break;
                     case R.id.rb_news:
-                        vp.setCurrentItem(1,false);
+                        vp.setCurrentItem(1, false);
+//                        pagers.get(1).initData();
                         break;
                     case R.id.rb_setting:
-                        vp.setCurrentItem(2,false);
+                        vp.setCurrentItem(2, false);
+//                        pagers.get(2).initData();
                         break;
                 }
             }
         });
+        vp.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                pagers.get(position).initData();
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+        pagers.get(0).initData();
         //默认选中主页
         rgMain.check(R.id.rb_home);
     }
 
-    class MyAdapter extends PagerAdapter{
+    class MyAdapter extends PagerAdapter {
 
         @Override
         public int getCount() {
@@ -94,11 +115,12 @@ public class ContentFragment extends BaseFragment {
             BasePager basePager = pagers.get(position);
             View rootView = basePager.rootView;
             //调用initData方法
-            basePager.initData();//HomePager,NewsPager,SettingPager
+            //basePager.initData();//HomePager,NewsPager,SettingPager
             container.addView(rootView);
             return rootView;
         }
     }
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
