@@ -69,11 +69,11 @@ public class WelcomeActivity extends AppCompatActivity {
                 if (startMain) {
                     //进入主页面
                     intent = new Intent(WelcomeActivity.this, MainActivity.class);
+                    startActivity(intent);
                 } else {
                     intent = new Intent(WelcomeActivity.this, GuideActivity.class);
+                    startActivity(intent);
                 }
-
-                startActivity(intent);
                 //关闭当前页面
                 finish();
             }
