@@ -16,6 +16,7 @@ public class MainActivity extends SlidingFragmentActivity {
     public static final String LEFT_TAG = "left_tag";
     public static final String MAIN_TAG = "main_tag";
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,5 +55,13 @@ public class MainActivity extends SlidingFragmentActivity {
 
         //设置主页面占的宽度
         slidingMenu.setBehindOffset(DensityUtil.dip2px(this, 200));
+    }
+
+    /**
+     * 得到左侧菜单Fragment
+     * @return
+     */
+    public LeftMenuFragment getLeftMenuFragment() {
+        return  (LeftMenuFragment) getSupportFragmentManager().findFragmentByTag(LEFT_TAG);
     }
 }
