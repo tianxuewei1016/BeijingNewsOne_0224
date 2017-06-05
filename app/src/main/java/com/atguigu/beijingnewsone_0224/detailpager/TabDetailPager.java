@@ -16,6 +16,7 @@ import com.atguigu.beijingnewsone_0224.base.MenuDetailBasePager;
 import com.atguigu.beijingnewsone_0224.domain.NewsCenterBean;
 import com.atguigu.beijingnewsone_0224.domain.TabDetailPagerBean;
 import com.atguigu.beijingnewsone_0224.utils.Constants;
+import com.atguigu.beijingnewsone_0224.view.HorizontalScrollViewPager;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.gson.Gson;
@@ -37,7 +38,7 @@ import okhttp3.Call;
 public class TabDetailPager extends MenuDetailBasePager {
     private final NewsCenterBean.DataBean.ChildrenBean childrenBean;
 
-    ViewPager viewpager;
+    HorizontalScrollViewPager viewpager;
     TextView tvTitle;
     LinearLayout llPointGroup;
     @InjectView(R.id.lv)
@@ -61,7 +62,7 @@ public class TabDetailPager extends MenuDetailBasePager {
 
         //顶部的视图
         View viewTopNews = View.inflate(mContext, R.layout.tab_detail_topnews, null);
-        viewpager = (ViewPager) viewTopNews.findViewById(R.id.viewpager);
+        viewpager = (HorizontalScrollViewPager) viewTopNews.findViewById(R.id.viewpager);
         tvTitle = (TextView) viewTopNews.findViewById(R.id.tv_title);
         llPointGroup = (LinearLayout) viewTopNews.findViewById(R.id.ll_point_group);
         //把顶部的部分以添加头的方式加入ListView中
@@ -71,7 +72,12 @@ public class TabDetailPager extends MenuDetailBasePager {
         viewpager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
+                //把之前的设置默认
+                llPointGroup.getChildAt(prePosition).setEnabled(false);
+                //当前的设置true
+                llPointGroup.getChildAt(position).setEnabled(true);
+                //记录当前值
+                prePosition = position;
             }
 
             @Override
@@ -79,12 +85,7 @@ public class TabDetailPager extends MenuDetailBasePager {
                 String title = topnews.get(position).getTitle();
                 tvTitle.setText(title);
 
-                //把之前的设置默认
-                llPointGroup.getChildAt(prePosition).setEnabled(false);
-                //当前的设置true
-                llPointGroup.getChildAt(position).setEnabled(true);
-                //记录当前值
-                prePosition = position;
+
             }
 
             @Override
