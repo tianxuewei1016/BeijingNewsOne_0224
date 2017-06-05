@@ -11,7 +11,7 @@ import android.view.MotionEvent;
  * 作用：
  */
 
-public class NoViewPager extends ViewPager{
+public class NoViewPager extends ViewPager {
     public NoViewPager(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
@@ -19,5 +19,15 @@ public class NoViewPager extends ViewPager{
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
         return true;
+    }
+
+    /**
+     * 事件传递给孩子
+     * @param ev
+     * @return
+     */
+    @Override
+    public boolean onInterceptTouchEvent(MotionEvent ev) {
+        return false;
     }
 }
