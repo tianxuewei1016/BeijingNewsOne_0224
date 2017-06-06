@@ -146,5 +146,12 @@ public class NewsPager extends BasePager {
             //隐藏
             ib_switch_list_grid.setVisibility(View.GONE);
         }
+        ib_switch_list_grid.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PhotosMenuDetailPager basePager1 = (PhotosMenuDetailPager) basePagers.get(2);
+                basePager1.swichListAndGrid(ib_switch_list_grid);
+            }
+        });
     }
 }
