@@ -41,7 +41,7 @@ public class NewsPager extends BasePager {
      */
     private List<NewsCenterBean.DataBean> datas;
     /**
-     *左侧菜单详情的页面集合
+     * 左侧菜单详情的页面集合
      */
     private List<MenuDetailBasePager> basePagers;
 
@@ -67,7 +67,7 @@ public class NewsPager extends BasePager {
         //添加到布局上
         fl_content.addView(textView);
         String saveJson = CacheUtils.getString(context, Constants.NEWSCENTER_PAGER_URL);
-        if(!TextUtils.isEmpty(saveJson)) {
+        if (!TextUtils.isEmpty(saveJson)) {
             processData(saveJson);
         }
         //网络请求
@@ -90,7 +90,7 @@ public class NewsPager extends BasePager {
                     @Override
                     public void onResponse(String response, int id) {
 //                        Log.e("TAG", "联网成功" + response);
-                        CacheUtils.putString(context,Constants.NEWSCENTER_PAGER_URL,response);
+                        CacheUtils.putString(context, Constants.NEWSCENTER_PAGER_URL, response);
                         processData(response);
                     }
                 });
@@ -110,9 +110,9 @@ public class NewsPager extends BasePager {
         MainActivity mainActivity = (MainActivity) context;
 
         basePagers = new ArrayList<>();
-        basePagers.add(new NewsMenuDetailPager(context,datas.get(0).getChildren()));//新闻详情页面
+        basePagers.add(new NewsMenuDetailPager(context, datas.get(0).getChildren()));//新闻详情页面
         basePagers.add(new TopicMenuDetailPager(context));//专题详情页面
-        basePagers.add(new PhotosMenuDetailPager(context));//组图详情页面
+        basePagers.add(new PhotosMenuDetailPager(context, datas.get(2)));//组图详情页面
         basePagers.add(new InteractMenuDetailPager(context));//互动详情页面
         basePagers.add(new VoteMenuDetailPager(context));//投票详情页面
 
@@ -124,14 +124,27 @@ public class NewsPager extends BasePager {
 
     /**
      * 根据位置切换到不同的详情页面
+     *
      * @param prePosition
      */
     public void swichPager(int prePosition) {
+
+        //设置标题
+        tv_title.setText(datas.get(prePosition).getTitle());
+
         MenuDetailBasePager basePager = basePagers.get(prePosition);//NewsMenuDetailPager,TopicMenuDetailPager...
         View rootView = basePager.rootView;
         fl_content.removeAllViews();//把之前显示的给移除
         fl_content.addView(rootView);
         //调用InitData
         basePager.initData();
+
+        if (prePosition == 2) {
+            //显示
+            ib_switch_list_grid.setVisibility(View.VISIBLE);
+        } else {
+            //隐藏
+            ib_switch_list_grid.setVisibility(View.GONE);
+        }
     }
 }
