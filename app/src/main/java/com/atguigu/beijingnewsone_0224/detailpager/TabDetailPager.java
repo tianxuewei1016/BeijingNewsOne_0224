@@ -24,6 +24,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.gson.Gson;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
+import com.handmark.pulltorefresh.library.extras.SoundPullEventListener;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
@@ -70,7 +71,14 @@ public class TabDetailPager extends MenuDetailBasePager {
         ButterKnife.inject(this, view);
         //得到listView
         lv = pullRefreshList.getRefreshableView();
-
+        /**
+         * 增加下拉刷新的声音
+         */
+        SoundPullEventListener<ListView> soundListener = new SoundPullEventListener<ListView>(mContext);
+        soundListener.addSoundEvent(PullToRefreshBase.State.PULL_TO_REFRESH, R.raw.pull_event);
+        soundListener.addSoundEvent(PullToRefreshBase.State.RESET, R.raw.reset_sound);
+        soundListener.addSoundEvent(PullToRefreshBase.State.REFRESHING, R.raw.refreshing_sound);
+        pullRefreshList.setOnPullEventListener(soundListener);
         //顶部的视图
         View viewTopNews = View.inflate(mContext, R.layout.tab_detail_topnews, null);
         viewpager = (HorizontalScrollViewPager) viewTopNews.findViewById(R.id.viewpager);
