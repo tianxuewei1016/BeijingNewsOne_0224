@@ -1,16 +1,22 @@
 package com.atguigu.beijingnewsone_0224.detailpager;
 
 import android.content.Context;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ProgressBar;
 
 import com.atguigu.beijingnewsone_0224.R;
+import com.atguigu.beijingnewsone_0224.adapter.PhotosMenuDetailPagerAdapater;
 import com.atguigu.beijingnewsone_0224.base.MenuDetailBasePager;
 import com.atguigu.beijingnewsone_0224.domain.NewsCenterBean;
+import com.atguigu.beijingnewsone_0224.domain.PhotosMenuDetailPagerBean;
 import com.atguigu.beijingnewsone_0224.utils.Constants;
+import com.google.gson.Gson;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
+
+import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -31,7 +37,8 @@ public class PhotosMenuDetailPager extends MenuDetailBasePager {
     @InjectView(R.id.progressbar)
     ProgressBar progressbar;
     private String url;
-
+    private List<PhotosMenuDetailPagerBean.DataEntity.NewsEntity> datas;
+    private PhotosMenuDetailPagerAdapater adapater;
 
     public PhotosMenuDetailPager(Context context, NewsCenterBean.DataBean dataBean) {
         super(context);
@@ -74,9 +81,23 @@ public class PhotosMenuDetailPager extends MenuDetailBasePager {
 
     /**
      * 解析数据
+     *
      * @param json
      */
     private void processData(String json) {
-
+        PhotosMenuDetailPagerBean bean = new Gson().fromJson(json, PhotosMenuDetailPagerBean.class);
+        datas = bean.getData().getNews();
+        if (datas != null && datas.size() > 0) {
+            //有数据
+            progressbar.setVisibility(View.GONE);
+            adapater = new PhotosMenuDetailPagerAdapater(mContext, datas);
+            //设置适配器
+            recyclerview.setAdapter(adapater);
+            //设置布局管理器
+            recyclerview.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false));
+        } else {
+            //没有数据
+            progressbar.setVisibility(View.VISIBLE);
+        }
     }
 }
