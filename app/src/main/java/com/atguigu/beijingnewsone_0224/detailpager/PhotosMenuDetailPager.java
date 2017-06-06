@@ -1,6 +1,7 @@
 package com.atguigu.beijingnewsone_0224.detailpager;
 
 import android.content.Context;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -38,6 +39,8 @@ public class PhotosMenuDetailPager extends MenuDetailBasePager {
     RecyclerView recyclerview;
     @InjectView(R.id.progressbar)
     ProgressBar progressbar;
+    @InjectView(R.id.refresh_layout)
+    SwipeRefreshLayout refreshLayout;
     private String url;
     private List<PhotosMenuDetailPagerBean.DataEntity.NewsEntity> datas;
     private PhotosMenuDetailPagerAdapater adapater;
@@ -52,6 +55,16 @@ public class PhotosMenuDetailPager extends MenuDetailBasePager {
         //实例视图
         View view = View.inflate(mContext, R.layout.pager_photos_menu_detail, null);
         ButterKnife.inject(this, view);
+
+        //设置下拉刷新
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getDataFromNet(url);
+            }
+        });
+        //设置滑动多少距离有效果
+//        refreshLayout.setDistanceToTriggerSync(100);
         return view;
     }
 
@@ -101,6 +114,8 @@ public class PhotosMenuDetailPager extends MenuDetailBasePager {
             //没有数据
             progressbar.setVisibility(View.VISIBLE);
         }
+        //影藏刷新效果
+        refreshLayout.setRefreshing(false);
     }
 
     /**
