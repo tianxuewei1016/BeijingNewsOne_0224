@@ -20,9 +20,12 @@ public class BitmapCacheUtils {
      */
     private LocalCacheUtils localCacheutils;
 
+    private MemoryCacheUtils memoryCacheUtils;
+
     public BitmapCacheUtils(Handler handler) {
-        localCacheutils = new LocalCacheUtils();
-        netCachUtils = new NetCachUtils(handler,localCacheutils);
+        memoryCacheUtils = new MemoryCacheUtils();
+        localCacheutils = new LocalCacheUtils(memoryCacheUtils);
+        netCachUtils = new NetCachUtils(handler, localCacheutils, memoryCacheUtils);
     }
 
     /**
@@ -40,11 +43,17 @@ public class BitmapCacheUtils {
      */
     public Bitmap getBitmap(String imageUrl, int position) {
         // 从内存中取图片
-
+        if (memoryCacheUtils != null) {
+            Bitmap bitmap = memoryCacheUtils.getBitmapFromMemory(imageUrl);
+            if (bitmap != null) {
+                Log.e("TAG", "图片是从内存获取的哦==" + position);
+                return bitmap;
+            }
+        }
         //从本地文件中取图片
-        if(localCacheutils!=null) {
+        if (localCacheutils != null) {
             Bitmap bitmap = localCacheutils.getBitmap(imageUrl);
-            if(bitmap!=null) {
+            if (bitmap != null) {
                 Log.e("TAG", "图片是从本地获取的哦==" + position);
                 return bitmap;
             }

@@ -3,6 +3,7 @@ package com.atguigu.beijingnewsone_0224.utils;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Environment;
+import android.util.Log;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -15,6 +16,12 @@ import java.io.FileOutputStream;
  */
 
 public class LocalCacheUtils {
+    private final MemoryCacheUtils memoryCacheUtils;
+
+    public LocalCacheUtils(MemoryCacheUtils memoryCacheUtils) {
+        this.memoryCacheUtils = memoryCacheUtils;
+    }
+
     /**
      * 保存图片
      *
@@ -39,11 +46,15 @@ public class LocalCacheUtils {
             if (!file.exists()) {
                 file.createNewFile();
             }
+            Log.e("TAG", "file==" + file.getAbsolutePath());
             //保存图片
             FileOutputStream fos = new FileOutputStream(file);
             //写入数据
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
 
+            if (bitmap != null) {
+                memoryCacheUtils.putBitmap2Memory(imageUrl, bitmap);
+            }
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -68,6 +79,10 @@ public class LocalCacheUtils {
 
             if (file.exists()) {
                 Bitmap bitmap = BitmapFactory.decodeStream(new FileInputStream(file));
+
+                if (bitmap != null) {
+                    memoryCacheUtils.putBitmap2Memory(imageUrl, bitmap);
+                }
                 return bitmap;
             }
 
