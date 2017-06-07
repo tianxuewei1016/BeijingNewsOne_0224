@@ -5,6 +5,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
@@ -14,6 +15,7 @@ import com.atguigu.beijingnewsone_0224.adapter.PhotosMenuDetailPagerAdapater;
 import com.atguigu.beijingnewsone_0224.base.MenuDetailBasePager;
 import com.atguigu.beijingnewsone_0224.domain.NewsCenterBean;
 import com.atguigu.beijingnewsone_0224.domain.PhotosMenuDetailPagerBean;
+import com.atguigu.beijingnewsone_0224.utils.CacheUtils;
 import com.atguigu.beijingnewsone_0224.utils.Constants;
 import com.google.gson.Gson;
 import com.zhy.http.okhttp.OkHttpUtils;
@@ -73,10 +75,16 @@ public class PhotosMenuDetailPager extends MenuDetailBasePager {
         super.initData();
         //网络请求
         url = Constants.BASE_URL + dataBean.getUrl();
+
+        String saveJson = CacheUtils.getString(mContext, url);
+        if (!TextUtils.isEmpty(saveJson)) {
+            processData(saveJson);
+        }
+
         getDataFromNet(url);
     }
 
-    private void getDataFromNet(String url) {
+    private void getDataFromNet(final String url) {
         OkHttpUtils.get()
                 .url(url)
                 .build()
@@ -89,6 +97,7 @@ public class PhotosMenuDetailPager extends MenuDetailBasePager {
                     @Override
                     public void onResponse(String response, int id) {
 //                        Log.e("TAG", "图组请求成功==" + response);
+                        CacheUtils.putString(mContext, url, response);
                         processData(response);
                     }
                 });
@@ -105,7 +114,7 @@ public class PhotosMenuDetailPager extends MenuDetailBasePager {
         if (datas != null && datas.size() > 0) {
             //有数据
             progressbar.setVisibility(View.GONE);
-            adapater = new PhotosMenuDetailPagerAdapater(mContext, datas,recyclerview);
+            adapater = new PhotosMenuDetailPagerAdapater(mContext, datas, recyclerview);
             //设置适配器
             recyclerview.setAdapter(adapater);
             //设置布局管理器
