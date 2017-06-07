@@ -1,6 +1,7 @@
 package com.atguigu.beijingnewsone_0224.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.atguigu.beijingnewsone_0224.R;
+import com.atguigu.beijingnewsone_0224.activity.PicassoSampleActivity;
 import com.atguigu.beijingnewsone_0224.domain.PhotosMenuDetailPagerBean;
 import com.atguigu.beijingnewsone_0224.utils.Constants;
 import com.bumptech.glide.Glide;
@@ -70,6 +72,19 @@ public class PhotosMenuDetailPagerAdapater extends RecyclerView.Adapter<PhotosMe
         public MyViewHolder(View itemView) {
             super(itemView);
             ButterKnife.inject(this, itemView);
+            //设置点击事件
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+//                    String imageUrl = Constants.BASE_URL + datas.get(getLayoutPosition()).getListimage();
+//                    Intent intent = new Intent(mContext, PicassoSampleActivity.class);
+//                    intent.setData(Uri.parse(imageUrl));
+//                    mContext.startActivity(intent);
+                    Intent intent = new Intent(mContext, PicassoSampleActivity.class);
+                    intent.putExtra("url", Constants.BASE_URL + datas.get(getLayoutPosition()).getListimage());
+                    mContext.startActivity(intent);
+                }
+            });
         }
     }
 }

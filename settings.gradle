@@ -1,1 +1,1 @@
-include ':app', ':SlidingMenu_library', ':ViewPagerIndicator_library', ':PullToRefresh_library', ':BeijingNew_Library'
+include ':app', ':SlidingMenu_library', ':ViewPagerIndicator_library', ':PullToRefresh_library', ':BeijingNew_Library', ':PhotoView_library'
