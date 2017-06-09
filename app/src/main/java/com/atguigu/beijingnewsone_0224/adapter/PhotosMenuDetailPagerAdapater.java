@@ -18,6 +18,9 @@ import com.atguigu.beijingnewsone_0224.domain.PhotosMenuDetailPagerBean;
 import com.atguigu.beijingnewsone_0224.utils.BitmapCacheUtils;
 import com.atguigu.beijingnewsone_0224.utils.Constants;
 import com.atguigu.beijingnewsone_0224.utils.NetCachUtils;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 
 import java.util.List;
 
@@ -42,6 +45,8 @@ public class PhotosMenuDetailPagerAdapater extends RecyclerView.Adapter<PhotosMe
      * 3.网络缓存
      */
     private BitmapCacheUtils bitmapCacheUtils;
+
+    private DisplayImageOptions options;
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -71,6 +76,18 @@ public class PhotosMenuDetailPagerAdapater extends RecyclerView.Adapter<PhotosMe
         //把Hanlder传入构造方法
         bitmapCacheUtils = new BitmapCacheUtils(handler);
         this.recyclerview = recyclerview;
+        //配置圆角的代码
+        options = new DisplayImageOptions.Builder()
+                .showImageOnLoading(R.drawable.news_pic_default)
+                .showImageForEmptyUri(R.drawable.news_pic_default)
+                .showImageOnFail(R.drawable.news_pic_default)
+                .cacheInMemory(true)
+                .cacheOnDisk(true)
+                .considerExifParams(true)
+                .bitmapConfig(Bitmap.Config.RGB_565)
+                //设置矩形圆角图片
+                .displayer(new RoundedBitmapDisplayer(10))
+                .build();
     }
 
     @Override
@@ -91,12 +108,14 @@ public class PhotosMenuDetailPagerAdapater extends RecyclerView.Adapter<PhotosMe
 //                .diskCacheStrategy(DiskCacheStrategy.ALL)
 //                .into(holder.ivIcon);
         //设置点击事件
-        Bitmap bitmap = bitmapCacheUtils.getBitmap(imageUrl,position);
-        //图片对应的Tag就是位置
-        holder.ivIcon.setTag(position);
-        if(bitmap != null) {//来自内存和本地，不包括网络
-            holder.ivIcon.setImageBitmap(bitmap);
-        }
+//        Bitmap bitmap = bitmapCacheUtils.getBitmap(imageUrl, position);
+//        //图片对应的Tag就是位置
+//        holder.ivIcon.setTag(position);
+//        if (bitmap != null) {//来自内存和本地，不包括网络
+//            holder.ivIcon.setImageBitmap(bitmap);
+//        }
+
+        ImageLoader.getInstance().displayImage(Constants.BASE_URL + newsEntity.getListimage(), holder.ivIcon, options);
     }
 
     @Override
